@@ -97,11 +97,17 @@
     "socialLinks": {
       "type": "json"
     },
+    "job_seeker": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::job-seeker.job-seeker",
+      "inversedBy": "job_seeker_id"
+    },
     "employer": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::employer.employer",
-      "mappedBy": "employer_id"
+      "inversedBy": "employer_id"
     }
   }
 }

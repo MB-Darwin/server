@@ -12,16 +12,23 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "jobSeekerId": {
+    "job_seeker_id": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "admin::user"
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "job_seeker"
     },
     "interest": {
       "type": "json"
     },
     "roles": {
       "type": "json"
+    },
+    "application": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::application.application",
+      "mappedBy": "job_seeker_id"
     }
   }
 }

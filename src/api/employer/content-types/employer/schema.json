@@ -38,6 +38,12 @@
     },
     "team": {
       "type": "json"
+    },
+    "jobs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::job.job",
+      "mappedBy": "employer"
     }
   }
 }

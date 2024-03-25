@@ -12,15 +12,17 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "jobId": {
+    "job_id": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::job.job"
+      "target": "api::job.job",
+      "inversedBy": "application"
     },
-    "jobSeekerId": {
+    "job_seeker_id": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::job-seeker.job-seeker"
+      "target": "api::job-seeker.job-seeker",
+      "inversedBy": "application"
     },
     "status": {
       "type": "enumeration",

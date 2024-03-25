@@ -35,8 +35,9 @@
     },
     "employer": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::employer.employer"
+      "relation": "manyToOne",
+      "target": "api::employer.employer",
+      "inversedBy": "jobs"
     },
     "location": {
       "type": "json"
@@ -46,6 +47,12 @@
     },
     "language": {
       "type": "json"
+    },
+    "application": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::application.application",
+      "mappedBy": "job_id"
     }
   }
 }

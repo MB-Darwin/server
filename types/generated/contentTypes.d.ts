@@ -778,6 +778,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     phoneNumber: Attribute.String;
     avatar: Attribute.Media;
     socialLinks: Attribute.JSON;
+    job_seeker: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::job-seeker.job-seeker'
+    >;
     employer: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToOne',
@@ -812,12 +817,12 @@ export interface ApiApplicationApplication extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    jobId: Attribute.Relation<
+    job_id: Attribute.Relation<
       'api::application.application',
       'oneToOne',
       'api::job.job'
     >;
-    jobSeekerId: Attribute.Relation<
+    job_seeker_id: Attribute.Relation<
       'api::application.application',
       'oneToOne',
       'api::job-seeker.job-seeker'
@@ -866,6 +871,11 @@ export interface ApiEmployerEmployer extends Schema.CollectionType {
     founded: Attribute.DateTime;
     type: Attribute.String;
     team: Attribute.JSON;
+    jobs: Attribute.Relation<
+      'api::employer.employer',
+      'oneToMany',
+      'api::job.job'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -905,12 +915,17 @@ export interface ApiJobJob extends Schema.CollectionType {
     salary: Attribute.JSON;
     employer: Attribute.Relation<
       'api::job.job',
-      'oneToOne',
+      'manyToOne',
       'api::employer.employer'
     >;
     location: Attribute.JSON;
     skills: Attribute.JSON;
     language: Attribute.JSON;
+    application: Attribute.Relation<
+      'api::job.job',
+      'oneToOne',
+      'api::application.application'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -933,13 +948,18 @@ export interface ApiJobSeekerJobSeeker extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    jobSeekerId: Attribute.Relation<
+    job_seeker_id: Attribute.Relation<
       'api::job-seeker.job-seeker',
       'oneToOne',
-      'admin::user'
+      'plugin::users-permissions.user'
     >;
     interest: Attribute.JSON;
     roles: Attribute.JSON;
+    application: Attribute.Relation<
+      'api::job-seeker.job-seeker',
+      'oneToOne',
+      'api::application.application'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
