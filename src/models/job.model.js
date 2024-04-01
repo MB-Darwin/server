@@ -19,6 +19,7 @@ const jobSchema = new Schema(
     expDate: {
       type: Date,
       required: true,
+      expires: 0,
     },
     content: {
       type: String,
@@ -61,8 +62,7 @@ const jobSchema = new Schema(
     ],
     badge: {
       type: String,
-      required: true,
-      enum: ["Urgent"],
+      // enum: ["Urgent"],
     },
     XP: {
       type: String,

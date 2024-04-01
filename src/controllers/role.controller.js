@@ -1,6 +1,6 @@
 import { RoleModel, UserModel } from "../models/index.js";
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   try {
     console.log(req.body);
     const { name } = req.body;
@@ -12,11 +12,11 @@ const create = async (req, res) => {
 
     res.status(201).json({ msg: "Role created successfully." });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    next(err);
   }
 };
 
-const updateRole = async (req, res) => {
+const updateRole = async (req, res, next) => {
   try {
     await UserModel.findOneAndUpdate({
       id: req.params.id,
@@ -25,11 +25,11 @@ const updateRole = async (req, res) => {
 
     res.json({ msg: "Role updated successfully." });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    next(err);
   }
 };
 
-const deleteRole = async (req, res) => {
+const deleteRole = async (req, res, next) => {
   try {
     await UserModel.findOneAndDelete({
       id: req.params.id,
@@ -37,7 +37,7 @@ const deleteRole = async (req, res) => {
 
     res.json({ msg: "Role deleted successfully." });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    next(err);
   }
 };
 

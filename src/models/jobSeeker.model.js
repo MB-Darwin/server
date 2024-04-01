@@ -6,15 +6,26 @@ const JobSeekerSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    profession: {
-      type: Array,
-    },
+    professions: [
+      {
+        type: String,
+      },
+    ],
     interests: [
       {
         type: Schema.Types.ObjectId,
         ref: "Category",
       },
     ],
+    coverLetterUrl: {
+      type: String,
+    },
+    resumeUrl: {
+      type: String,
+    },
+    additionalDocUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

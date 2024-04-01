@@ -33,11 +33,6 @@ const userSchema = new Schema(
     },
 
     location: {
-      type: Schema.ObjectId,
-      ref: "Location",
-    },
-
-    address: {
       type: String,
     },
 
@@ -62,12 +57,20 @@ const userSchema = new Schema(
       default: "/src/assets/img/cover/cover_4.jpg",
     },
 
-    socialLinks: [
-      {
-        platform: String,
-        url: String,
+    socialLinks: {
+      facebook: {
+        type: String,
+        default: "",
       },
-    ],
+      instagram: {
+        type: String,
+        default: "",
+      },
+      linkedin: {
+        type: String,
+        default: "",
+      },
+    },
 
     about: {
       type: String,

@@ -12,7 +12,7 @@ const verifyJWT = async (req, res, next) => {
     req.user = { id: decoded.user.id, role: decoded.user.role };
     next();
   } catch (err) {
-    res.status(401).json({ msg: err.message });
+    res.status(401).json({ msg: "Unauthorized!", status: 401 });
   }
 };
 

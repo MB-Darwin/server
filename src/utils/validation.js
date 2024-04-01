@@ -3,6 +3,7 @@ import Joi from "joi";
 export const signUp = (data) => {
   const schema = Joi.object({
     name: Joi.string().required(),
+    interests: Joi.array(),
     role: Joi.string().required(),
     phoneNum: Joi.number().min(9).required(),
     email: Joi.string().email().min(10).required(),
@@ -43,7 +44,7 @@ export const job = (data) => {
     content: Joi.string().required(),
     empType: Joi.array().required(),
     XP: Joi.string().required(),
-    badge: Joi.string().required(),
+    badge: Joi.any(),
     category: Joi.string().required(),
     lang: Joi.array().required(),
     skills: Joi.array().required(),

@@ -1,4 +1,4 @@
-import roleList from "../data/role.js";
+import roleList from "../constants/role.js";
 import {
   CategoriesModel,
   EmployerModel,
@@ -14,8 +14,9 @@ import * as generate from "../utils/generateToken.js";
 import otpGenerator from "otp-generator";
 import bcrypt from "bcrypt";
 
-export const signUp = async (req, res) => {
+export const signUp = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { error } = validation.signUp(req.body);
     if (error)
       return res
@@ -106,13 +107,13 @@ export const signUp = async (req, res) => {
   `,
     });
 
-    res.status(201).json({ msg: "User signed up successfully", status: 201 });
+    res.status(201).json({ msg: "User Created!", status: 201 });
   } catch (error) {
-    res.status(500).json({ msg: "Internal server error", status: 500 });
+    next(err);
   }
 };
 
-// export const emailVerification = async (req, res) => {
+// export const emailVerification = async (req, res,next) => {
 //   try {
 //     const otp = req.body.otp;
 
@@ -126,11 +127,11 @@ export const signUp = async (req, res) => {
 //     await OTPModel.findOneAndDelete(OTP._id);
 //     res.status(200).json({ msg: "Email verified successfully" });
 //   } catch (err) {
-//     res.status(500).json({ msg: err.message });
+//     next(err);
 //   }
 // };
 
-export const signIn = async (req, res) => {
+export const signIn = async (req, res, next) => {
   try {
     const { error } = validation.signIn(req.body);
     if (error)
@@ -143,59 +144,35 @@ export const signIn = async (req, res) => {
     const user = await UserModel.findOne({ email }).populate("role").exec();
 
     if (!user)
-      return res.status(404).json({ msg: "Invalid Credentials", status: 404 });
+      return res.status(404).json({ msg: "Invalid Credentials!", status: 404 });
 
     if (user.validated) {
       const match = await bcrypt.compare(pwd, user.pwd);
 
       if (match) {
-        const accessToken = generate.accessToken({
+        const jwt = generate.accessToken({
           user: { id: user.id, role: user.role.name },
         });
 
-        const { pwd, ...userData } = user._doc;
+        const { role, _id, ...rest } = user._doc;
         res.json({
-          jwt: accessToken,
-          data: userData,
-          msg: "sign in successful",
+          jwt,
+          id: _id,
+          role: role.name,
+          msg: "Signed in!",
         });
       } else {
-        res.status(401).json({ msg: "Invalid password", status: 401 });
+        res.status(401).json({ msg: "Invalid Credentails!", status: 401 });
       }
     } else {
-      res
-        .status(401)
-        .json({ msg: "Unauthorized verify your email", status: 401 });
+      res.status(401).json({ msg: "Unauthentified User!", status: 401 });
     }
   } catch (err) {
-    res.status(500).json({ msg: "Internal server error", status: 500 });
+    next(err);
   }
 };
 
-export const refreshToken = async (req, res) => {
-  try {
-    const user = await UserModel.findOne({ refreshToken }).exec();
-    if (!user) return res.sendStatus(403);
-
-    jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET,
-      (err, decoded) => {
-        if (err || user.id === decoded.user.id) return res.sendStatus(403);
-
-        const accessToken = generate.accessToken({
-          user: { id: user.id, role: user.role },
-        });
-
-        res.json({ accessToken });
-      }
-    );
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-
-// export const forgotPassword = async (req, res) => {
+// export const forgotPassword = async (req, res,next) => {
 //   try {
 //     const { error } = validation.forgotPassword(req.body);
 //     if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -233,11 +210,11 @@ export const refreshToken = async (req, res) => {
 
 //     res.json({ msg: "Email send successfully" });
 //   } catch (err) {
-//     res.status(500).json({ msg: err.message });
+//     next(err);
 //   }
 // };
 
-// export const resetPassword = async (req, res) => {
+// export const resetPassword = async (req, res,next) => {
 //   try {
 //     const { error } = validation.resetPassword(req.body);
 //     if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -252,6 +229,6 @@ export const refreshToken = async (req, res) => {
 
 //     res.status(201).json({ msg: "Password Updated Successfully." });
 //   } catch (err) {
-//     res.status(500).json({ msg: err.message });
+//     next(err);
 //   }
 // };
